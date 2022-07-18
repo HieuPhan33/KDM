@@ -1,0 +1,47 @@
+name: "hsi3125_res50_fold1"        # name of this experiment. Used for comet-ml too
+#name: "hsi_dilation_conv_fold1"        # name of this experiment. Used for comet-ml too
+tags: ['standard', 'training']  # for comet-ml
+gpu_id: ['0','1']                     # must set as a string, empty means using CPU
+seed: 50
+resume: True
+train_params:
+  #dataset_dir: '/data/semantic_segmentation/data/UOW-HSI/'
+  #dataset_dir: '/home/hieu/research/data/UOW-HSI/'
+  dataset_dir: '/media/hieu/DATA1/UOW-HSI/'
+  train_txtfiles: ['data-3125/P2.txt', 'data-3125/P3.txt', 'data-3125/P4.txt', 'data-3125/P5.txt'] # textfiles containing the data path for training
+  test_txtfiles: 'data-3125/P1.txt'  # textfiles containing the data path for testing
+  n_cutoff_imgs: ''
+  batch_size: 32
+  #batch_size: 54
+  initial_epoch: 0
+  n_epochs: 900
+  num_workers: 4
+  early_stop: 1000
+  class_weights: [0.03, 0.035, 0.035, 0.905, 0.025]
+  #class_weights: [0, 0.035, 0.035, 0.905, 0.025]
+  #save_dir: 'hsi_sd_pool_r_16_fold1-20210114-113413'
+  #save_dir: 'hsi_res101_fold1-20210218-041728'
+  save_dir: ''
+
+optimizer:
+  type: Adam
+  args:
+    lr: 0.0001
+
+loss: KDLoss
+
+metric: MacroIoU
+
+model_params:       # params for generating the S-Net model
+  name: Res_SGR_Net
+  encoder_name: 'resnet50'
+  n_bands: 25
+  classes: [0, 1, 2, 3, 4]
+  nf_enc: [64, 256, 512, 1024,2048]
+  nf_dec: [1024, 512, 256, 64, 32, 8, 8]
+  do_batchnorm: 1
+  n_heads: 5
+  feat_weight: 0.15
+  resp_weight: 0.2
+  student_weight: 1.0
+  rates: [16]
