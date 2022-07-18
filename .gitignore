@@ -18,3 +18,6 @@ train_hsi1c.py
 train.py
 figures/*
 plot_loss/*
+*__pycache__*
+test_palette.py 
+result.csv
